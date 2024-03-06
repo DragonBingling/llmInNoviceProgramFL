@@ -1,0 +1,28 @@
+1|# coding=utf-8
+2|n = eval(input())
+3|i = 1
+4|flag = 1
+5|while i*i < n:
+6| if(n%i == 0):
+7| flag = 0
+8| break
+9| i += 1
+10|if flag == 1:
+11| print("prime")
+12|else:
+13| print("not prime")
+
+Given a code snippet.
+There are x lines in total.
+Index each line of source code(An empty line also counts a line).
+most of them are right.But there exist fault.
+There are no compilation errors.
+when input data to program,what makes the output result is not as expected is the fault.
+You should analyze the code and give each line an estimate of how likely an error is to occur.
+the sum of them is 100%,and they cannot be equal to each other.
+Sort and output them from most likely to least likely.
+Just output the result and nothing else.
+each line output format is as follows,replace a,b to your answer:
+line a possibility: b%,[code of this line]
+
+

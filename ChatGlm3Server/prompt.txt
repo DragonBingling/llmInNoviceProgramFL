@@ -1,0 +1,75 @@
+1  static DateTimeOfYear cStartOfYear;
+2  static Chronology cLenientISO;
+3  static ThreadLocal<Boolean> cVerbose = new ThreadLocal<Boolean>();
+4
+5  static {
+6      cVerbose.set(Boolean.FALSE);
+7  }
+8
+9  public static boolean verbose() {
+10     return cVerbose.get();
+11 }
+12
+13 public static void main(String[] args) throws Exception {
+14     if (args.length == 0) {
+15         printUsage();
+16         return;
+17     }
+18
+19     File inputDir = null;
+20     File outputDir = null;
+21     boolean verbose = false;
+22     int i;
+23
+24     for (i = 0; i < args.length; i++) {
+25         try {
+26             if ("-src".equals(args[i])) {
+27                 inputDir = new File(args[++i]);
+28             } else if ("-dst".equals(args[i])) {
+29                 outputDir = new File(args[++i]);
+30             } else if ("-verbose".equals(args[i])) {
+31                 verbose = true;
+32             } else if ("-?".equals(args[i])) {
+33                 printUsage();
+34                 return;
+35             } else {
+36                 break;
+37             }
+38         } catch (IndexOutOfBoundsException e) {
+39             printUsage();
+40             return;
+41         }
+42     }
+43
+44     if (i >= args.length) {
+45         printUsage();
+46         return;
+47     }
+48
+49     File[] sources = new File[args.length - i];
+50     for (int j = 0; i < args.length; i++, j++) {
+51         sources[j] = inputDir == null ? new File(args[i]) : new File(inputDir, args[i]);
+52     }
+53
+54     cVerbose.set(verbose);
+55     ZoneInfoCompiler zic = new ZoneInfoCompiler();
+56     zic.compile(outputDir, sources);
+57 }
+
+Given a code snippet.
+There are x lines in total.
+each line has its index in the beginning.
+most of them are right.But there exist fault.
+There are no compilation errors.
+when input data to program,what makes the output result is not as expected is the fault.
+You should analyze the code and give each line an estimate of how likely an error is to occur.
+Sort and output them from most likely to least likely.
+Just output the result and nothing else.
+each line output format is as follows,replace a,b to your answer:
+
+line a possibility: b1%
+
+a is the index of this line in the beginning.b is the possibility of this line to be fault.
+the sum of b is 100,and each bi isn't equal.
+
+

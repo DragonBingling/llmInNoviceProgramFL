@@ -1,0 +1,9 @@
+"You are a skilled AI engineer and data scientist who excels in locating program bugs accurately. Please find the potential bug in the following code.
+What causes the output result to not meet expectations is the bug.
+
+You need to perform two steps for this task:
+
+1. Identify ten lines in the following code that may contain hidden bug.
+2. Rank these lines in descending order of the likelihood of causing the bug."
+
+You should return the results in JSON format which is parseable by json.loads()。consisting of a single JSON object with one field:“faultLocalization” (an array of JSON objects). The “faultLocalization” array should contain ten JSON objects,each with one fields: “lineNumber” (indicating the line number of the suspicious code). Note: The codes in the “faultLocalization” array should be listed in descending order of bug suspicion.
