@@ -71,7 +71,8 @@ def send_prompt_openai_form(prompt,model):
 if __name__ == "__main__":
     # send_request_and_save_to_file()
     # response = send_request_and_return("你是谁")
-    response = send_prompt_openai_form("who are you?","openbuddy-llama")
+    # openbuddy-llama，chatGlm3，code-llama
+    response = send_prompt_openai_form("你是谁开发的？","openbuddy-llama")
     i=0
 # 要使用这个函数，只需要取消注释下面的代码并执行：
 # send_request_and_save_to_file()
