@@ -8,20 +8,7 @@ You need to perform two steps for this task:
 2. Rank these lines in descending order of the likelihood of causing the bug."
 
 You should return the results in JSON format which is parseable by json.loads()。
-consisting of a single JSON object with one field:“faultLocalization” (an array of JSON objects).
-The “faultLocalization” array should contain ten JSON objects,each with one fields: “lineNumber” (indicating the line number of the suspicious code).
-Note: The codes in the “faultLocalization” array should be listed in descending order of bug suspicion.
-
-差分文案
-You should return the results in JSON format which is parseable by json.loads()。
 consisting of a single JSON object with two fields: “intentOfThisFunction” (describing the intended purpose of the program), and
 “faultLocalization” (an array of JSON objects).
 The “faultLocalization” array should contain ten JSON objects,each with one fields: “lineNumber” (indicating the line number of the suspicious code).
 Note: The codes in the “faultLocalization” array should be listed in descending order of bug suspicion.
-
-
-差分可以有：
-1.增减新手程序描述
-2.增减是否使用思维链拆解错误定位问题。
-3.增减是否让其描述问题原因。（不要这个？
-4.增减是否让其描述该代码是在做什么。

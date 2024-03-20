@@ -35,7 +35,7 @@ def extract_json(input_string):
 
 def extract_json_regular(string):
     # 使用正则表达式查找包含整个 JSON 数据的部分
-    pattern = r'\{.{0,4}"faultLocalization".*\[.*\].{0,4}\}'  # 匹配整个 JSON 数据，包括换行符和空格
+    pattern = r'\{.{0,4000}"faultLocalization".*\[.*\].{0,4000}\}'  # 匹配整个 JSON 数据，包括换行符和空格
     matches = re.findall(pattern, string, re.S)
     # xi
     for json_str in matches:
@@ -50,13 +50,14 @@ def extract_json_regular(string):
             print("无法解析 JSON 数据:", e)
 
 if __name__ == "__main__":
-    with open("response.txt", 'r', encoding='utf-8') as file:
+    with open("./response.txt", 'r', encoding='utf-8') as file:
         # ��ȡ�ļ����ݲ����浽�ַ�����
         response = file.read()
 
     # res= extract_json(response)
     # print(res)
-    extract_json_regular(response)
+    data = extract_json_regular(response)
+    print(data)
     # 使用正则表达式查找包含整个 JSON 数据的部分
     # pattern = r'\{.*\[.*\].*\}'  # 匹配整个 JSON 数据，包括换行符和空格
     # matches = re.findall(pattern, response,re.S)

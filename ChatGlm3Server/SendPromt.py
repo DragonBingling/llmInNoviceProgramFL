@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # send_request_and_save_to_file()
     # response = send_request_and_return("你是谁")
     # openbuddy-llama，chatGlm3，code-llama
-    response = send_prompt_openai_form("你是谁开发的？","openbuddy-llama")
+    response = send_prompt_openai_form("who are you","code-llama")
     i=0
 # 要使用这个函数，只需要取消注释下面的代码并执行：
 # send_request_and_save_to_file()

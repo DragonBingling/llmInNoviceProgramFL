@@ -1,0 +1,14 @@
+{
+    "faultLocalization": [
+        {"lineNumber": 8},
+        {"lineNumber": 7},
+        {"lineNumber": 6},
+        {"lineNumber": 10},
+        {"lineNumber": 16},
+        {"lineNumber": 15},
+        {"lineNumber": 14},
+        {"lineNumber": 12},
+        {"lineNumber": 13},
+        {"lineNumber": 5}
+    ]
+}

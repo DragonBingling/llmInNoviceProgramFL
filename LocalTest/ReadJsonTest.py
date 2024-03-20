@@ -35,7 +35,8 @@ def extract_json(input_string):
 
 def extract_json_regular(string):
     # 使用正则表达式查找包含整个 JSON 数据的部分
-    pattern = r'\{.{0,4}"intentOfThisFunction".*\[.*\].{0,4}\}'  # 匹配整个 JSON 数据，包括换行符和空格
+    # pattern = r'\{.{0,4}"intentOfThisFunction".*\[.*\].{0,4}\}'  # 匹配整个 JSON 数据，包括换行符和空格
+    pattern = r'\{.{0,4}"faultLocalization".*\[.*\].{0,4}\}'  # 匹配整个 JSON 数据，包括换行符和空格
     matches = re.findall(pattern, string, re.S)
     # xi
     for json_str in matches:
