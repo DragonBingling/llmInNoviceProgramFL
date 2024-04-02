@@ -73,7 +73,9 @@ def send_prompt_openai_gpt(prompt,model):
         mykey = file.read()
 
     client = OpenAI(
-        base_url="https://oneapi.xty.app/v1",
+        # your openai url
+        base_url="YOUR URL",
+        # your key
         api_key=mykey
     )
     # print(mykey)
@@ -95,11 +97,7 @@ def send_prompt_openai_gpt(prompt,model):
 
 # Automatically call send_request_and_save_to_file() when the script is executed
 if __name__ == "__main__":
-    # send_request_and_save_to_file()
-    # response = send_request_and_return("你是谁")
     # model="gpt-3.5-turbo",
-    # model = "gpt-4",  # 将模型更改为GPT-4
+    # model = "gpt-4",  \
     response = send_prompt_openai_gpt("你学习过ConDefects数据集吗","gpt-3.5-turbo")
     i=0
-# 要使用这个函数，只需要取消注释下面的代码并执行：
-# send_request_and_save_to_file()

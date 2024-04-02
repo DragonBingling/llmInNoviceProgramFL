@@ -39,6 +39,7 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
     if os.path.exists(response_topN_location):
         print("这个topN已经计算过了，跳过他")
         return True
+
     with open(code_location, 'r', encoding='utf-8') as file:
         # 读取文件内容并保存到字符串中
         code = file.read()
@@ -62,7 +63,7 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
             # 发送请求在这
             print(" 第 " + str(repeat_time - repeat_time_this) + " 次请求。" + code_location)
             # response_txt = send_request_and_return(prompt_code)
-            response_txt = SendPromt.send_prompt_openai_gpt(prompt_code,experiment_model)
+            response_txt = SendPromt.send_prompt_openai_form(prompt_code,experiment_model)
         except:
             print(" 请求发送异常"+code_location)
             continue
@@ -123,8 +124,7 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
                 with open(res_json_location, 'wb') as file:
                     pickle.dump(res_json_data, file)
                 with open(response_topN_location, 'w') as file:
-                        file.write(str(topN))
-
+                    file.write(str(topN))
                 # 跳出循环
             print("数据存储成功 "+code_location)
             return True
@@ -205,8 +205,6 @@ def test_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
 
 def test_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
     root_path = "/root/autodl-tmp/data/ConDefects-main/Code/"
-    # with open("evaluate/errlist.pkl", "rb") as f:
-    #     errlist = pickle.load(f)
     Condefects_Filter_Data = []
     break_flag = False
     jump_flag = True
@@ -342,7 +340,7 @@ def test_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
     #         file.write(versionStr+"\n\n"+prompt)
 
 def run_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
-    root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/ConDefects-main/Code/"
+    root_path = "/root/autodl-tmp/data/ConDefects-main/Code/"
 
     with open('evaluate/Condefects_Filter_Data.pkl', 'rb') as file:
             Condefects_Filter_Data = pickle.load(file)
@@ -395,7 +393,7 @@ def run_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
 
 
 def run_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
-    root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/codeflaws/version/"
+    root_path = "/root/autodl-tmp/data/codeflaws/version/"
     Codeflaws_Filter_Data = []
     with open("evaluate/Codeflaws_Filter_Data.pkl", "rb") as f:
         Codeflaws_Filter_Data = pickle.load(f)
@@ -445,14 +443,13 @@ def run_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
 
 def run_all(prompt):
     # 批量跑实验
-    experiment_model = "gpt-4"
+    experiment_model = "openbuddy-llama"
     for i in [1, 2, 3, 4, 5]:
         run_Condefects(prompt, i, experiment_model, 503)
     for i in [1, 2, 3, 4, 5]:
         run_Codeflaws(prompt, i, experiment_model, 503)
-    # run_Codeflaws(prompt, 10, experiment_model, 503)
-    # run_Condefects(prompt, 10, experiment_model, 503)
 
+# Automatically call send_request_and_save_to_file() when the script is executed
 if __name__ == "__main__":
     prompt_location = "./prompts/prompt1-all.txt"
     with open(prompt_location, 'r', encoding='utf-8') as file:
@@ -460,6 +457,7 @@ if __name__ == "__main__":
         prompt = file.read()
 
     run_all(prompt)
+
 
 
 
