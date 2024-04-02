@@ -1,0 +1,7 @@
+name:  top1 top2 top3 top4 top5 top10
+dstarMBFL: [3, 8, 24, 37, 75, 282]
+dstarSBFL: [13, 34, 54, 75, 106, 298]
+ochiMBFL: [3, 8, 24, 37, 75, 282]
+ochiSBFL: [13, 34, 54, 75, 106, 298]
+opMBFL: [3, 8, 24, 37, 75, 282]
+opSBFL: [13, 34, 54, 75, 107, 297]

@@ -55,12 +55,61 @@ raw_datas\data\codeflaws\version\v1\test_data\gpt-4
 
 
 
+## 4. Run
+
+为了方便实验的复现，我们将主要代码整理成**CodeArrange**文件夹中。复现实验仅需要关注这个文件夹。
+
+ChatGlm3Server 与 LocalTest 文件夹是真实实验过程中在两个服务器上运行的源代码。其中ChatGlm3Server面向开源大模型，LocalTest面向商业大模型。
 
 
 
+进入**CodeArrange**文件夹：
+
+Sendpromt用于向大模型发送请求并收集结果。
+
+- 其中，send_prompt_openai_gpt函数用于GPT的请求发送，在该函数中，需要将base_url与api_key改成请求对应的链接地址和key，可以在官网购买额度。
+- send_prompt_openai_form用于开源大模型的请求，只需要修改对请求地址为上文LLM的api地址即可。key可随意填写。
+- <u>可以先测试Sendpromt请求通过后，再进行下一步</u>。
+
+ReadJsonTest用于提取LLM返回的结果中的json字段
+
+getTokenNumbers用于提取prompt的token数量。
+
+AddLineNumber用于处理源代码，将每一行加上行号。
+
+------
+
+Gpt4-AllSend，Gpt3-5-AllSend，GLM3-AllSend，LLama2-AllSend，codeLLama-AllSend 用于向各个大模型批量的发送新手程序错误定位的请求，并将结果数据存入data之中。
+
+在运行前需要修改一些属于你的配置，这里我们以Gpt4-AllSend举例：
+
+- prompt_location 用于获取prompt，可以修改成你自定义的prompt
+- run_Codeflaws 与 run_Codeflaws 是向相应数据集整体遍历请求一次数据，其中 root_path 需要修改成数据集存放的地址。
+- Condefects_Filter_Data.pkl 存放着我们在数据集中过滤出来的程序信息。
+
+------
+
+Gpt4-prompt-various 用于对多种不同的prompt进行实验，prompt都存放在prompts文件夹之中。
 
 
 
-记得修改你的key。
+## 5. Evaluate
 
-记得修改prompt的地址。
+进入Evaluate文件夹，为对数据结果进行评估的代码
+
+### Accuracy Count
+
+进入Evaluate文件夹，在total_count文件中对各个LLM的精确性进行统计，在sbfl_mbfl_count中对sbfl与mbfl的精确性进行统计。<u>运行前注意修改root_path为相应的数据集地址。</u>若是用上文提供的数据集源数据，注意开源LLM与GPT的数据集地址不一样，root_path注意修改。
+
+
+
+### Overlap 
+
+进入 Evaluate/venn 目录下 Calc_venn_all_Codeflaws 与 Calc_venn_all_Condefects 文件用于评估统计并绘制venn图。与上一步类似，修改好每个root_path之后运行即可。
+
+
+
+### Prompt ablation
+
+进入Evaluate文件夹，prompt_various_count_Codeflaws文件与 prompt_various_count_Condefects 文件用于统计不同的消融结果。
+

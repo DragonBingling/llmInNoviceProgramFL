@@ -73,7 +73,7 @@ def send_prompt_openai_gpt(prompt,model):
         mykey = file.read()
 
     client = OpenAI(
-        base_url="https://oneapi.xty.app/v1",
+        base_url="YOUR KEY",
         api_key=mykey
     )
     # print(mykey)

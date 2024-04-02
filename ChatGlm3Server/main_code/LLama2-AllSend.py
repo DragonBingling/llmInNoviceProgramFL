@@ -205,8 +205,6 @@ def test_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
 
 def test_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
     root_path = "/root/autodl-tmp/data/ConDefects-main/Code/"
-    # with open("evaluate/errlist.pkl", "rb") as f:
-    #     errlist = pickle.load(f)
     Condefects_Filter_Data = []
     break_flag = False
     jump_flag = True

@@ -104,7 +104,9 @@ def analyze_Condefects(experiment_index, model_name, rangeIndex,root_path):
     top1_list = set()
     top5_list = set()
     top10_list = set()
-
+    minlen = 1000000
+    maxlen = 0
+    sum = 0
     try:
         with open("D:/私人资料/论文/大模型相关/大模型错误定位实证研究/LLM_In_Novice_Program_FL/LocalTest/main_code/evaluate/Condefects_Filter_Data.pkl", 'rb') as file:
             Condefects_Filter_Data = pickle.load(file)
@@ -156,6 +158,16 @@ def analyze_Condefects(experiment_index, model_name, rangeIndex,root_path):
                     # Condefects_Filter_Data = remove_element(Condefects_Filter_Data,answer)
                     # err_list.append(versionInt)
                     # continue
+                # with open(code_location, 'r') as file:
+                #     code = file.read()
+                with open(code_location, 'r', encoding='utf-8') as file:
+                    # 读取文件内容并保存到字符串中
+                    code = file.readlines()
+                if len(code) > maxlen:
+                    maxlen = len(code)
+                if len(code) < minlen:
+                    minlen = len(code)
+                sum+=len(code)
 
                 topN_Index = int(topN_str)
                 if topN_Index <= 1:
@@ -328,7 +340,7 @@ if __name__ == "__main__":
     # 画codeflaws上的
     title = "LLMs_in_Codeflaws_5"
     root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/codeflaws/version"
-    ans_gpt4 = analyze_Codeflaws("prompt", 1, "gpt-4", 503,root_path)
+    # ans_gpt4 = analyze_Codeflaws("prompt", 1, "gpt-4", 503,root_path)
     # ans_gpt3_5 = analyze_Codeflaws("prompt", 1, "gpt-3.5-turbo", 503,root_path)
     # ans_chatGlm3 = analyze_Codeflaws("prompt", 1, "chatGlm3", 503,root_path)
     # root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data_2024_0313/codeflaws/version"
@@ -346,8 +358,8 @@ if __name__ == "__main__":
 
     # 画condefects上的
     # title = "LLMs_in_Condefects_5"
-    # root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/ConDefects-main/Code"
-    # ans_gpt4 = analyze_Condefects( 1, "gpt-4", 503, root_path)
+    root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/ConDefects-main/Code"
+    ans_gpt4 = analyze_Condefects( 1, "gpt-4", 503, root_path)
     # ans_gpt3_5 = analyze_Condefects( 1, "gpt-3.5-turbo", 503, root_path)
     # ans_chatGlm3 = analyze_Condefects( 1, "chatGlm3", 503, root_path)
     # root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data_2024_0313/ConDefects-main/Code"

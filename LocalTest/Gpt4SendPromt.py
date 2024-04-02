@@ -39,7 +39,7 @@ def send_request_and_return(prompt):
         mykey = file.read()
 
     client = OpenAI(
-        base_url="https://oneapi.xty.app/v1",
+        base_url="YOUR URL",
         api_key=mykey
     )
     # print(mykey)

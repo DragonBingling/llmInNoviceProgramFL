@@ -1,0 +1,6 @@
+name:  top1 top2 top3 top4 top5
+ans_gpt4: [90, 152, 198, 235, 266]
+ans_gpt3_5: [100, 157, 194, 221, 240]
+ans_chatGlm3: [9, 28, 54, 82, 106]
+ans_llama: [8, 27, 49, 68, 89]
+ans_codellama: [41, 73, 104, 126, 136]
