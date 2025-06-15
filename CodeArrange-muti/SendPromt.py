@@ -74,7 +74,8 @@ def send_prompt_openai_gpt(prompt,model):
 
     client = OpenAI(
         # your openai url
-        base_url="https://api.xty.app/v1",
+        base_url="https://yunwu.ai/v1",
+        # base_url="https://openai.note-card.com/v1",
         # your key
         api_key=mykey
     )
@@ -98,6 +99,7 @@ def send_prompt_openai_gpt(prompt,model):
 # Automatically call send_request_and_save_to_file() when the script is executed
 if __name__ == "__main__":
     # model="gpt-3.5-turbo",
-    # model = "gpt-4",  \
-    response = send_prompt_openai_gpt("你学习过ConDefects数据集吗","gpt-3.5-turbo")
+    model = "gpt-4",
+    response = send_prompt_openai_gpt("你学习过ConDefects数据集吗","o1-mini")
+    print(response)
     i=0

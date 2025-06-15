@@ -31,7 +31,7 @@ projectOrigin = {
     # "JxPath": 22,
 }
 
-def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,experiment_model):
+def send_single_code_faultlocalization(prompt, ans_path,code_index,code_info,experiment_model):
     response_txt_location = os.path.join(ans_path, "response.txt")
     response_topN_location = os.path.join(ans_path, "topN.txt")
     res_json_location = os.path.join(ans_path, "response.pkl")
@@ -39,19 +39,17 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
     if os.path.exists(response_topN_location):
         print("这个topN已经计算过了，跳过他")
         return True
-    with open(code_location, 'r', encoding='utf-8') as file:
-        # 读取文件内容并保存到字符串中
-        code = file.read()
 
-    prompt_code=prompt+"\n\n"+code;
+    prompt_code = prompt+"\n\n"+code_info['incorrect_code_indexed'];
     # with open("response.txt", 'w') as file:
     #     file.write(prompt_code)
     tokens = getTokenNumbers.get_openai_token_len(prompt_code, model="text-davinci-001")
+
     if tokens > 2048:
-        print("超出token限制跳过,"+code_location)
+        print("超出token限制跳过," + str(code_index))
         return False
 
-    repeat_time = 10;
+    repeat_time = 5;
 
     repeat_time_this = repeat_time;
     while repeat_time_this>0:
@@ -60,21 +58,21 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
 
         try:
             # 发送请求在这
-            print(" 第 " + str(repeat_time - repeat_time_this) + " 次请求。" + code_location)
+            print(" 第 " + str(repeat_time - repeat_time_this) + " 次请求。" + str(code_index))
             # response_txt = send_request_and_return(prompt_code)
             response_txt = SendPromt.send_prompt_openai_gpt(prompt_code,experiment_model)
         except:
-            print(" 请求发送异常"+code_location)
+            print(" 请求发送异常" + str(code_index))
             continue
 
         try:
             res_json_data = ReadJsonTest.extract_json_regular(response_txt)
         except:
-            print(" Json读取异常"+code_location)
+            print(" Json读取异常" + str(code_index))
             continue
 
         if res_json_data is None:
-            print(code_location + " json读取到空")
+            print(str(code_index) + " json读取到空")
             continue
             # if repeat_time_this == 1:
             #     print("请求次数达到最大，跳过")
@@ -96,37 +94,23 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
             for index in range(len(faultlist)):
                 # print(faultlist[index]['lineNumber'])
                 try:
-                    if faultlist[index]['lineNumber']==faultdata:
+                    if faultlist[index]['lineNumber'] == code_info['faultLines'][0]:
                         topN=index+1
                         break
                 except:
                     print("读取lineNumber失败")
             print("topN: ",topN)
-            # for index in range(len(faultlist)):
-            #     # print(faultlist[index]['lineNumber'])
-            #     lineNumber=-1
-            #     try:
-            #         lineNumber = int(faultlist[index]['lineNumber'])
-            #     except:
-            #         print("lineNumber转换失败: ")
-            #         print(faultlist)
-            #     if not lineNumber<0:
-            #         continue
-            #     if lineNumber==faultdata:
-            #         topN=index+1
-            #         break
-            # print("topN: ",topN)
 
             if ReplaceIndex == True:
-                with open(response_txt_location, 'w') as file:
+                with open(response_txt_location, 'w', encoding='utf-8') as file:
                     file.write(response_txt)
                 with open(res_json_location, 'wb') as file:
                     pickle.dump(res_json_data, file)
-                with open(response_topN_location, 'w') as file:
+                with open(response_topN_location, 'w', encoding='utf-8') as file:
                         file.write(str(topN))
 
                 # 跳出循环
-            print("数据存储成功 "+code_location)
+            print("数据存储成功 " + str(code_index))
             return True
             break
     return False
@@ -443,52 +427,97 @@ def run_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
 
         isok = send_single_code_faultlocalization(prompt, ans_path, code_location, faulte_data_index, experiment_model)
 
+def run_Tutorcode(prompt,experiment_index,experiment_model,rangeIndex):
+    # root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/codeflaws/version/"
+    root_path = "D:/私人资料2024/论文/大模型相关/多代理新手程序错误定位实验/data/tutorcode/version/"
+    json_data_path = "D:/私人资料2024/论文/大模型相关/多代理新手程序错误定位实验/DataSets/TutorCode_generateFaultLines_indexed.json"
+
+    with open(json_data_path, 'r', encoding='utf-8') as file:
+        # 使用json.load()方法从文件中读取并解析JSON数据
+        tutor_data = json.load(file)
+
+    process_num = 0
+
+    for index, item in enumerate(tutor_data):
+
+        process_num +=1
+        if process_num>rangeIndex:
+            break
+
+        print("正在跑Codeflaws上的 " + experiment_model + " 实验： " + str(experiment_index) + " 的第 " + str(
+            process_num) + " 个程序")
+
+        ans_path = os.path.join(root_path, str(index), experiment_model, str(experiment_index))
+
+        # 使用os.path.exists检查文件夹是否存在
+        if not os.path.exists(ans_path):
+            # 如果文件夹不存在，则创建它
+            os.makedirs(ans_path)
+
+        isok = send_single_code_faultlocalization(prompt, ans_path, index, item, experiment_model)
+
 def run_all(prompt):
     # 批量跑实验
-    # experiment_model = "gpt-3.5-turbo"
-    experiment_model = "gpt-3.5-turbo"
-    # for i in [1, 3, 4, 5]:
-    # run_Condefects(prompt, 2, experiment_model, 503)
-    # for i in [1, 2, 3, 4, 5]:
-    experiment_index = "testtime"
-    run_Codeflaws(prompt, experiment_index, experiment_model, 503)
-    run_Condefects(prompt, experiment_index, experiment_model, 503)
+    experiment_model = "gpt-4"
+    for i in [1, 2, 3, 4, 5]:
+        run_Condefects(prompt, i, experiment_model, 503)
+    for i in [1, 2, 3, 4, 5]:
+        run_Codeflaws(prompt, i, experiment_model, 503)
+    # run_Codeflaws(prompt, 10, experiment_model, 503)
+    # run_Condefects(prompt, 10, experiment_model, 503)
 
-# Automatically call send_request_and_save_to_file() when the script is executed
 if __name__ == "__main__":
-    prompt_location = "prompt-要求输出为json-增加可解析描述.txt"
+    # run_Tutorcode(prompt, 'normal_1',"gpt-4o",1000)
+
+    experiment_model = "deepseek-r1"
+    base_location = "./prompts"
+
+    # prompt_location = os.path.join(base_location,"prompt1-all.txt")
+    # with open(prompt_location, 'r', encoding='utf-8') as file:
+    #     # 读取文件内容并保存到字符串中
+    #     prompt = file.read()
+    # # run_Codeflaws(prompt, "prompt1-all", experiment_model, 50)
+    # run_Tutorcode(prompt, 'prompt1-all', experiment_model, 1000)
+
+    prompt_location = os.path.join(base_location, "prompt1-noChain.txt")
     with open(prompt_location, 'r', encoding='utf-8') as file:
         # 读取文件内容并保存到字符串中
         prompt = file.read()
+    # run_Codeflaws(prompt, "prompt1-noChain2", experiment_model, 50)
+    run_Tutorcode(prompt, 'prompt1-noChain.txt', experiment_model, 1000)
 
-    run_all(prompt)
+    # prompt_location = os.path.join(base_location, "prompt1-noIntent.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    # run_Codeflaws(prompt, "prompt1-noIntent2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noIntent2", experiment_model, 50)
+    run_Tutorcode(prompt, 'prompt1-noIntent2', experiment_model, 1000)
 
-    # 发送一次得到回答
-    # send_single_code_faultlocalization(prompt,ans_path_v1,code_location_v1,6)
+    # prompt_location = os.path.join(base_location, "prompt1-noNoviceDescription.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    run_Tutorcode(prompt, 'prompt1-noNoviceDescription', experiment_model, 1000)
+    # run_Codeflaws(prompt, "prompt1-noNoviceDescription2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noNoviceDescription2", experiment_model, 50)
 
-    # # 遍历Codeflaws进行测试
-    # experiment_index = 2
-    # experiment_model="chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # test_Codeflaws(prompt,experiment_index,experiment_model,1544)
+    prompt_location = os.path.join(base_location, "prompt1-noReason.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    run_Tutorcode(prompt, 'prompt1-noReason', experiment_model, 1000)
+    # run_Codeflaws(prompt, "prompt1-noReason2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noReason2", experiment_model, 50)
 
-    # 遍历Condefects进行测试
-    # experiment_index = 1
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # test_Condefects(prompt, experiment_index, experiment_model, 1000)
+    prompt_location = os.path.join(base_location, "prompt1-noSort.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    run_Tutorcode(prompt, 'prompt1-noSort', experiment_model, 1000)
+    # run_Codeflaws(prompt, "prompt1-noSort2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noSort2", experiment_model, 50)
 
-    #跑Codeflaws
-    # experiment_index = 2
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # run_Codeflaws(prompt, experiment_index, experiment_model, 1544)
-
-    # 跑ConDefects
-    # experiment_index = 2
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # run_Condefects(prompt, experiment_index, experiment_model, 511)
 
 
 

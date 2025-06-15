@@ -35,6 +35,7 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
     response_txt_location = os.path.join(ans_path, "response.txt")
     response_topN_location = os.path.join(ans_path, "topN.txt")
     res_json_location = os.path.join(ans_path, "response.pkl")
+    prompt_location = os.path.join(ans_path, "prompt.txt")
 
     if os.path.exists(response_topN_location):
         print("这个topN已经计算过了，跳过他")
@@ -124,6 +125,8 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
                     pickle.dump(res_json_data, file)
                 with open(response_topN_location, 'w') as file:
                         file.write(str(topN))
+                with open(prompt_location, 'w') as file:
+                        file.write(prompt_code)
 
                 # 跳出循环
             print("数据存储成功 "+code_location)
@@ -446,53 +449,56 @@ def run_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
 def run_all(prompt):
     # 批量跑实验
     # experiment_model = "gpt-3.5-turbo"
-    experiment_model = "gpt-3.5-turbo"
+    experiment_model = "gpt-4"
     # for i in [1, 3, 4, 5]:
     # run_Condefects(prompt, 2, experiment_model, 503)
     # for i in [1, 2, 3, 4, 5]:
-    experiment_index = "testtime"
-    run_Codeflaws(prompt, experiment_index, experiment_model, 503)
-    run_Condefects(prompt, experiment_index, experiment_model, 503)
+    run_Codeflaws(prompt, 2, experiment_model, 503)
 
 # Automatically call send_request_and_save_to_file() when the script is executed
 if __name__ == "__main__":
-    prompt_location = "prompt-要求输出为json-增加可解析描述.txt"
+    experiment_model = "gpt-4"
+    base_location = "./prompts"
+
+    prompt_location = os.path.join(base_location,"prompt1-all.txt")
     with open(prompt_location, 'r', encoding='utf-8') as file:
         # 读取文件内容并保存到字符串中
         prompt = file.read()
+    run_Codeflaws(prompt, "prompt1-all", experiment_model, 50)
+    run_Condefects(prompt, "prompt1-all", experiment_model, 50)
 
-    run_all(prompt)
+    prompt_location = os.path.join(base_location, "prompt1-noChain.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    run_Codeflaws(prompt, "prompt1-noChain2", experiment_model, 50)
+    run_Condefects(prompt, "prompt1-noChain2", experiment_model, 50)
 
-    # 发送一次得到回答
-    # send_single_code_faultlocalization(prompt,ans_path_v1,code_location_v1,6)
+    # prompt_location = os.path.join(base_location, "prompt1-noIntent.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    # run_Codeflaws(prompt, "prompt1-noIntent2", experiment_model, 50)
+    run_Condefects(prompt, "prompt1-noIntent2", experiment_model, 50)
 
-    # # 遍历Codeflaws进行测试
-    # experiment_index = 2
-    # experiment_model="chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # test_Codeflaws(prompt,experiment_index,experiment_model,1544)
+    # prompt_location = os.path.join(base_location, "prompt1-noNoviceDescription.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    # run_Codeflaws(prompt, "prompt1-noNoviceDescription2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noNoviceDescription2", experiment_model, 50)
 
-    # 遍历Condefects进行测试
-    # experiment_index = 1
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # test_Condefects(prompt, experiment_index, experiment_model, 1000)
+    prompt_location = os.path.join(base_location, "prompt1-noReason.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    # run_Codeflaws(prompt, "prompt1-noReason2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noReason2", experiment_model, 50)
 
-    #跑Codeflaws
-    # experiment_index = 2
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # run_Codeflaws(prompt, experiment_index, experiment_model, 1544)
-
-    # 跑ConDefects
-    # experiment_index = 2
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # run_Condefects(prompt, experiment_index, experiment_model, 511)
-
-
-
-
-
-
+    prompt_location = os.path.join(base_location, "prompt1-noSort.txt")
+    with open(prompt_location, 'r', encoding='utf-8') as file:
+        # 读取文件内容并保存到字符串中
+        prompt = file.read()
+    # run_Codeflaws(prompt, "prompt1-noSort2", experiment_model, 50)
+    # run_Condefects(prompt, "prompt1-noSort2", experiment_model, 50)
 

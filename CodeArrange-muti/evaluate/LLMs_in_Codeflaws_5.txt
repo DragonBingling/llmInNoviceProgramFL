@@ -1,0 +1,3 @@
+name:  top1 top2 top3 top4 top5
+ans_gpt4: [90, 152, 198, 235, 266]
+ans_gpt4_muti: [75, 121, 165, 210, 248]

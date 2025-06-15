@@ -1,0 +1,27 @@
+name:  top1 top2 top3 top4 top5
+ans_gpt4_normal: [56, 69, 78, 83, 87]
+ans_gpt4_muti: [63, 74, 81, 86, 92]
+--------------
+ans_gpt4o_normal: [61, 69, 73, 77, 82]
+ans_gpt4o_muti: [65, 82, 85, 91, 92]
+ans_gpt4o_noC: [63, 70, 82, 86, 90]
+ans_gpt4o_noI: [59, 70, 76, 80, 81]
+ans_gpt4o_noN: [61, 66, 79, 82, 86]
+ans_gpt4o_noR: [62, 71, 79, 81, 85]
+ans_gpt4o_noS: [53, 62, 69, 75, 79]
+--------------
+ans_deepseek_r1_normal: [68, 77, 84, 89, 90]
+ans_deepseek_r1_muti: [72, 79, 85, 90, 93]
+ans_deepseek_noC: [61, 72, 76, 79, 79]
+ans_deepseek_noI: [67, 76, 79, 81, 83]
+ans_deepseek_noN: [60, 74, 80, 83, 83]
+ans_deepseek_noR: [64, 74, 81, 83, 86]
+ans_deepseek_noS: [67, 77, 79, 80, 82]
+ans_deepseek_muti_noProblemAnalyze: [58, 70, 76, 79, 87]
+ans_deepseek_muti_noCodeAnalyze: [58, 67, 71, 77, 84]
+ans_deepseek_muti_noSimulateRunner: [62, 74, 83, 88, 91]
+--------------
+ans_llama_normal: [45, 65, 73, 79, 82]
+ans_llama_muti: [64, 78, 82, 82, 86]
+ans_glm4_normal: [13, 23, 30, 38, 46]
+ans_glm4_muti: [16, 24, 33, 44, 48]

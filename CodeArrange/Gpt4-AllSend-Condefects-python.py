@@ -47,7 +47,7 @@ def send_single_code_faultlocalization(prompt, ans_path,code_location,faultdata,
     # with open("response.txt", 'w') as file:
     #     file.write(prompt_code)
     tokens = getTokenNumbers.get_openai_token_len(prompt_code, model="text-davinci-001")
-    if tokens > 2048:
+    if tokens > 4096:
         print("超出token限制跳过,"+code_location)
         return False
 
@@ -340,12 +340,24 @@ def test_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
     #         code = file.read()
     #     with open(test_outfile, 'w') as file:
     #         file.write(versionStr+"\n\n"+prompt)
+def read_txt_file(file_path):
+    data = []
+    with open(file_path, 'r') as file:
+        for line in file:
+            # 去除首尾空格和换行符，然后根据逗号拆分成列表
+            line_data = line.strip().strip("[]").split(", ")
+            # 将每个字符串转换为整数并加入到data列表中
+            line_data = [int(num) for num in line_data]
+            data.extend(line_data)
+    return data
 
 def run_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
     root_path = "D:/私人资料/论文/大模型相关/大模型错误定位实证研究/data/ConDefects-main/Code/"
 
-    with open('evaluate/Condefects_Filter_Data.pkl', 'rb') as file:
-            Condefects_Filter_Data = pickle.load(file)
+    Condefects_Filter_Data = ['27941784', '27435812', '45556032', '45533632', '45705547', '45492377', '45517397', '28699500', '45484239', '45030219', '45814496', '45722066', '45783776', '45722260', '46056572', '46028780', '45783787', '43997330', '33055837', '42021171', '44101361', '40185010', '45767519', '44122587', '38915312', '38915061', '44930062', '45573210', '45777524', '45654990', '45332649', '44419168', '44646979', '45545460', '45003873', '45713633', '46026874', '45291809', '39123866', '45484479', '45803747', '44118621', '45317107', '32093401', '45275005', '45491531', '45279577', '31643804', '30923012', '45083106', '45754993', '45558657', '44668354', '44681618', '45471607', '45545981', '42082334', '33700497', '33700944', '46165545', '45750635', '45954819', '44094167', '46203182', '45935608', '36684114', '43020372', '45483518', '45054015', '41610915', '41651640', '45126109', '45974029', '37666166', '43954461', '45479683', '44381954', '43572863', '43559540', '45999150', '46206496', '45969465', '45574605', '45459245', '46183354', '44934690', '45461646', '45053294', '43012792', '46215877', '45520506', '44593613', '43463915', '43307420', '31727307', '31726462', '31731857', '38267983', '43287084', '38323705', '38323187', '38271304', '38556628', '38487427', '44987159', '45343856', '45523633', '34616740', '45277640', '45104462', '44441991', '45577481', '46153900', '44598432', '44415594', '46197892', '45488021', '45788276', '45028964', '44700899', '46009389', '45210558', '39201856', '42827862', '42886459', '43019650', '36403213', '37116120', '45284602', '45806316', '45777353', '45243368', '45038482', '45472060', '42888318', '45098095', '34289751', '40312293', '42233391', '35355978', '40932797', '39326078', '45683063', '45675161', '45791883', '45506869', '43716281', '40631011', '40304207', '42020807', '42743947', '45515530', '45522067', '42717104', '38524622', '38644891', '45218169', '45769357', '30239419', '36174552', '39679022', '45331235', '45897088', '45055612', '39687485', '45897602', '45469208', '45780372', '45753152', '45039073', '44882552', '45458203', '41639432', '43068920', '44404835', '39550972', '37080781', '45747617', '45725346', '46045444', '27582246', '27576444', '45502599', '45966660', '44864172', '44696240', '45992139', '40380616', '45533288', '45345625', '40407040', '44778158', '45256391', '46206336', '46129092', '45205318', '45989052', '46174870', '45084922', '37078962', '35227817', '36890038', '38471956', '38465931', '38467027', '45736394', '44672786', '46045921', '31269738', '44009597', '45812454', '44986856', '45710768', '45933759', '45053944', '40705107', '34807717', '44996552', '45811839', '45700046', '44163778', '43723091', '45802611', '43008956', '43399874', '44888915', '45664223', '45559213', '40787964', '43275130', '46196808', '37994644', '41927392', '46162583', '45814894', '45282104', '45522180', '45699667', '45303110', '45971969', '45489946', '34717448', '30827068', '34316813', '30830027', '30833301', '30896644', '31059522', '46033322', '45999253', '46151794', '45037018', '46188576', '45791112', '45999403', '45092436', '45343318', '45267327', '39202960', '39194356', '44652899', '38921956', '45090669', '45504321', '45665153', '32337261', '45949713', '46136201', '31137799', '45645329', '46194473', '45753057', '45752844', '46138292', '45948664', '45993248', '45783074', '45733476', '43029081', '40105806', '43234248', '45982558', '42742272', '27727642', '38955195', '27746730', '42090105', '45717410', '34720181', '34667900', '33636883', '43694743', '45944008', '39808227', '38864069', '45230444', '45802660', '27693193', '45107250', '44452913', '45539466', '40556226', '45736644', '46134579', '44929141', '45946021', '41328369', '45260317', '37028649', '45970897', '45268157', '45533123', '45313651', '29313863', '45761832', '46051370', '46217262', '31499069', '38643909', '39342455', '34054427', '40524794', '44926075', '41325604', '36899282', '45494468', '45803292', '45117916', '45948106', '44829145', '45785883', '32778317', '32782351', '32779304', '37620333', '40706832', '31744615', '45517172', '45289055', '46189922', '45710087', '46182298', '45788753', '45280139', '46179112', '44831745', '45723345', '45749744', '38744633', '45509155', '45756800', '44825978', '44613596', '44667415', '46182612', '45738993', '45118455', '45068144', '46165455', '45092563', '39932705', '46162555', '36162097', '45214207', '42875065', '45899321', '44408199', '40182881', '46008577', '42959730', '45445288', '41124657', '40431476', '38559514']
+
+    # with open('evaluate/Condefects_Filter_Data.pkl', 'rb') as file:
+    #         Condefects_Filter_Data = pickle.load(file)
 
     process_num = 0
     # 遍历文件夹中的所有内容
@@ -359,14 +371,14 @@ def run_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
         # 检查是否为文件夹
         if os.path.isdir(question_path):
             try:
-                java_path = os.path.join(question_path,"Java")
+                java_path = os.path.join(question_path,"Python")
                 questions = os.listdir(java_path)
                 answers = os.listdir(java_path)
             except:
                 print("列出JavaPath "+java_path+" 失败")
                 continue
             for answer in answers:
-                if answer not in Condefects_Filter_Data:
+                if str(answer) not in Condefects_Filter_Data:
                     continue
                 process_num+=1
                 if process_num > rangeIndex:
@@ -375,11 +387,11 @@ def run_Condefects(prompt,experiment_index,experiment_model,rangeIndex):
                 print("正在跑Condefects上的 "+experiment_model+" 实验： "+str(experiment_index)+" 的第 "+str(process_num)+" 个程序")
 
                 #给代码增加行号
-                AddLineNumber.process_code(os.path.join(java_path, answer), "faultyVersion.java")
+                AddLineNumber.process_code(os.path.join(java_path, answer), "faultyVersion.py")
                 # code_location = os.path.join(root_path,versionStr,"test_data/defect_root/source/tcas.c")
                 # 增加行号的code_location
                 # code_location = os.path.join(root_path, versionStr, "test_data/defect_root/source/tcas.c_indexed.txt")
-                code_location = os.path.join(java_path, answer, "faultyVersion.java_indexed.txt")
+                code_location = os.path.join(java_path, answer, "faultyVersion.py_indexed.txt")
                 faulte_data_path = os.path.join(java_path, answer, "faultLocation.txt")
                 ans_path = os.path.join(java_path, answer, experiment_model,str(experiment_index))
                 faulte_data_index = get_fault_data(faulte_data_path)
@@ -445,50 +457,21 @@ def run_Codeflaws(prompt,experiment_index,experiment_model,rangeIndex):
 
 def run_all(prompt):
     # 批量跑实验
-    # experiment_model = "gpt-3.5-turbo"
-    experiment_model = "gpt-3.5-turbo"
-    # for i in [1, 3, 4, 5]:
-    # run_Condefects(prompt, 2, experiment_model, 503)
+    experiment_model = "gpt-4"
+    for i in [1, 2]:
+        run_Condefects(prompt, i, experiment_model, 503)
     # for i in [1, 2, 3, 4, 5]:
-    experiment_index = "testtime"
-    run_Codeflaws(prompt, experiment_index, experiment_model, 503)
-    run_Condefects(prompt, experiment_index, experiment_model, 503)
+    #     run_Codeflaws(prompt, i, experiment_model, 503)
+    # # run_Condefects(prompt, "test", experiment_model, 503)
 
-# Automatically call send_request_and_save_to_file() when the script is executed
 if __name__ == "__main__":
-    prompt_location = "prompt-要求输出为json-增加可解析描述.txt"
+    prompt_location = "./prompts/prompt1-all.txt"
     with open(prompt_location, 'r', encoding='utf-8') as file:
         # 读取文件内容并保存到字符串中
         prompt = file.read()
 
     run_all(prompt)
 
-    # 发送一次得到回答
-    # send_single_code_faultlocalization(prompt,ans_path_v1,code_location_v1,6)
-
-    # # 遍历Codeflaws进行测试
-    # experiment_index = 2
-    # experiment_model="chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # test_Codeflaws(prompt,experiment_index,experiment_model,1544)
-
-    # 遍历Condefects进行测试
-    # experiment_index = 1
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # test_Condefects(prompt, experiment_index, experiment_model, 1000)
-
-    #跑Codeflaws
-    # experiment_index = 2
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # run_Codeflaws(prompt, experiment_index, experiment_model, 1544)
-
-    # 跑ConDefects
-    # experiment_index = 2
-    # experiment_model = "chatGlm3"
-    # # modelAns(gpt4),chatGlm3
-    # run_Condefects(prompt, experiment_index, experiment_model, 511)
 
 
 

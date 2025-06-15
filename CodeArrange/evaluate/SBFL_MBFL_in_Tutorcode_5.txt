@@ -1,0 +1,13 @@
+name:  top1 top2 top3 top4 top5 top10
+dstarMBFL: [14, 27, 35, 44, 53, 72]
+dstarSBFL: [0, 0, 6, 16, 20, 58]
+ochiMBFL: [14, 27, 35, 44, 53, 72]
+ochiSBFL: [0, 0, 6, 16, 20, 58]
+opMBFL: [14, 27, 35, 44, 53, 72]
+opSBFL: [0, 0, 6, 16, 20, 58]
+
+dstarVSBFL:[19,37,45,60,76]
+ochiVSBFL:[19,37,45,60,75]
+opVSBFL:[19,37,45,60,75]
+
+Grace:[21,33,50,62,77]
